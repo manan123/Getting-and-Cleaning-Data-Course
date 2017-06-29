@@ -1,8 +1,6 @@
 library(plyr)
 
-# Step 1
-# Extracting and Merge the training and test sets to create one data set
-###############################################################################
+# Step 1 - Extracting and Merge the training and test sets to create one data set
 
 if(!file.exists("./data")){dir.create("./data")}
 fileUrl <- "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
@@ -28,9 +26,7 @@ y_data <- rbind(y_train, y_test)
 # create 'subject' data set
 subject_data <- rbind(subject_train, subject_test)
 
-# Step 2
-# Extract only the measurements on the mean and standard deviation for each measurement
-###############################################################################
+# Step 2 - Extract only the measurements on the mean and standard deviation for each measurement
 
 features <- read.table("features.txt")
 
@@ -43,9 +39,7 @@ x_data <- x_data[, mean_and_std_features]
 # correct the column names
 names(x_data) <- features[mean_and_std_features, 2]
 
-# Step 3
-# Use descriptive activity names to name the activities in the data set
-###############################################################################
+# Step 3 - Use descriptive activity names to name the activities in the data set
 
 activities <- read.table("activity_labels.txt")
 
@@ -55,9 +49,7 @@ y_data[, 1] <- activities[y_data[, 1], 2]
 # correct column name
 names(y_data) <- "activity"
 
-# Step 4
-# Appropriately label the data set with descriptive variable names
-###############################################################################
+# Step 4 - Appropriately label the data set with descriptive variable names
 
 # correct column name
 names(subject_data) <- "subject"
@@ -65,10 +57,8 @@ names(subject_data) <- "subject"
 # bind all the data in a single data set
 all_data <- cbind(x_data, y_data, subject_data)
 
-# Step 5
-# Create a second, independent tidy data set with the average of each variable
+# Step 5 - Create a second, independent tidy data set with the average of each variable
 # for each activity and each subject
-###############################################################################
 
 # 66 <- 68 columns but last two (activity & subject)
 averages_data <- ddply(all_data, .(subject, activity), function(x) colMeans(x[, 1:66]))
